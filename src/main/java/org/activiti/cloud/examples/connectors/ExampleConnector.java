@@ -41,8 +41,26 @@ public class ExampleConnector {
         this.integrationResultSender = integrationResultSender;
     }
 
+    @StreamListener(value = ExampleConnectorChannels.EXAMPLE_CONNECTOR_ACTION_CONSUMER)
+    public void performTaskFromConnectorAction(IntegrationRequest event) throws InterruptedException {
+        logger.info(append("service-name",
+                appName),
+                ">>> In example-cloud-connector connector action");
+
+        Map<String,Object> outBoundVariables = new HashMap<>();
+        Map<String, Object> inBoundVariables = event.getIntegrationContext().getInBoundVariables();
+        if(inBoundVariables.get("input-variable-name-1") != null){
+            logger.info(append("service-name",
+                    appName),
+                    ">>> Found the matching inBoundVariable");
+
+            outBoundVariables.put("output-variable-name-1","output-variable-name-1");
+        }
+        sendOutBoundMessage(event, outBoundVariables);
+    }
+
     @StreamListener(value = ExampleConnectorChannels.EXAMPLE_CONNECTOR_CONSUMER)
-    public void performTask(IntegrationRequest event) throws InterruptedException {
+    public void performTaskFromConnector(IntegrationRequest event) throws InterruptedException {
 
         logger.info(append("service-name",
                            appName),
@@ -55,8 +73,12 @@ public class ExampleConnector {
         Map<String, Object> results = new HashMap<>();
         results.put("var1",
                     var1);
+        sendOutBoundMessage(event, results);
+    }
+
+    private void sendOutBoundMessage(IntegrationRequest event, Map<String, Object> outBoundVariables){
         Message<IntegrationResult> message = IntegrationResultBuilder.resultFor(event, connectorProperties)
-                .withOutboundVariables(results)
+                .withOutboundVariables(outBoundVariables)
                 .buildMessage();
         integrationResultSender.send(message);
     }

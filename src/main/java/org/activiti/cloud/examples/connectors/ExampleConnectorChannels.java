@@ -23,7 +23,12 @@ public interface ExampleConnectorChannels {
 
     String EXAMPLE_CONNECTOR_CONSUMER = "exampleConnectorConsumer";
 
+    String EXAMPLE_CONNECTOR_ACTION_CONSUMER = "exampleConnectorWithActionConsumer";
+
     @Input(EXAMPLE_CONNECTOR_CONSUMER)
     SubscribableChannel exampleConnectorConsumer();
+
+    @Input(EXAMPLE_CONNECTOR_ACTION_CONSUMER)
+    SubscribableChannel exampleConnectorWithActionConsumer();
 
 }
