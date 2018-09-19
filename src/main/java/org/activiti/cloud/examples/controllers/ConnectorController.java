@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 public class ConnectorController {
 
@@ -16,6 +18,11 @@ public class ConnectorController {
     public String welcome() {
         return " { \"welcome\" : \"This is Example Cloud Connector\"," +
                 "  \"var1\" : \""+exampleConnector.getVar1Copy()+"\" }";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/v1/home-inbound-variables")
+    public String welcomeInputVariables(){
+        return "{ \"input-variable-name-1\" : \""+exampleConnector.getInBoundVariable()+"\" }";
     }
 
 }

@@ -31,6 +31,9 @@ public class ExampleConnector {
     //just a convenience - not recommended in real implementations
     private String var1Copy = "";
 
+    //just a convenience - not recommended in real implementations
+    private String inBoundVariable = "";
+
     @Autowired
     private ConnectorProperties connectorProperties;
 
@@ -41,21 +44,29 @@ public class ExampleConnector {
         this.integrationResultSender = integrationResultSender;
     }
 
+    /**
+     * For acceptance test purpose, it expects only one variable in the message
+     *
+     **/
     @StreamListener(value = ExampleConnectorChannels.EXAMPLE_CONNECTOR_ACTION_CONSUMER)
     public void performTaskFromConnectorAction(IntegrationRequest event) throws InterruptedException {
         logger.info(append("service-name",
                 appName),
-                ">>> In example-cloud-connector connector action");
+                ">>> " + ExampleConnector.class.getSimpleName()+" was called for instance " + event.getIntegrationContext().getProcessInstanceId());
 
         Map<String,Object> outBoundVariables = new HashMap<>();
         Map<String, Object> inBoundVariables = event.getIntegrationContext().getInBoundVariables();
-        if(inBoundVariables.get("input-variable-name-1") != null){
-            logger.info(append("service-name",
-                    appName),
-                    ">>> Found the matching inBoundVariable");
 
-            outBoundVariables.put("output-variable-name-1","output-variable-name-1");
+        for (Map.Entry<String, Object> entry : inBoundVariables.entrySet()) {
+            logger.info("Item : " + entry.getKey() + " Object : " + entry.getValue());
+            inBoundVariable = entry.getKey();
         }
+
+        //matching outbound variable
+        outBoundVariables.put("output-variable-name-1","output-variable-name-1");
+        //not matching outbound variable
+        outBoundVariables.put("output-no-match","output-no-match");
+
         sendOutBoundMessage(event, outBoundVariables);
     }
 
@@ -87,4 +98,7 @@ public class ExampleConnector {
         return var1Copy;
     }
 
+    public String getInBoundVariable() {
+        return inBoundVariable;
+    }
 }
