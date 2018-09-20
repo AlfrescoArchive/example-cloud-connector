@@ -32,7 +32,7 @@ public class ExampleConnector {
     private String var1Copy = "";
 
     //just a convenience - not recommended in real implementations
-    private String inBoundVariable = "";
+    private Map<String, Object> inBoundVariables = new HashMap<>();
 
     @Autowired
     private ConnectorProperties connectorProperties;
@@ -55,11 +55,10 @@ public class ExampleConnector {
                 ">>> " + ExampleConnector.class.getSimpleName()+" was called for instance " + event.getIntegrationContext().getProcessInstanceId());
 
         Map<String,Object> outBoundVariables = new HashMap<>();
-        Map<String, Object> inBoundVariables = event.getIntegrationContext().getInBoundVariables();
 
-        for (Map.Entry<String, Object> entry : inBoundVariables.entrySet()) {
+        for (Map.Entry<String, Object> entry : event.getIntegrationContext().getInBoundVariables().entrySet()) {
             logger.info("Item : " + entry.getKey() + " Object : " + entry.getValue());
-            inBoundVariable = entry.getKey();
+            inBoundVariables.put(entry.getKey(), entry.getValue());
         }
 
         //matching outbound variable
@@ -98,7 +97,7 @@ public class ExampleConnector {
         return var1Copy;
     }
 
-    public String getInBoundVariable() {
-        return inBoundVariable;
+    public Map<String, Object> getInBoundVariables() {
+        return inBoundVariables;
     }
 }

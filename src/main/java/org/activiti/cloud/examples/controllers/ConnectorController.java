@@ -21,8 +21,8 @@ public class ConnectorController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/v1/home-inbound-variables")
-    public String welcomeInputVariables(){
-        return "{ \"input-variable-name-1\" : \""+exampleConnector.getInBoundVariable()+"\" }";
+    public Map<String,Object> welcomeInputVariables(){
+        return exampleConnector.getInBoundVariables();
     }
 
 }
