@@ -62,6 +62,9 @@ public class ExampleConnector {
         Map<String, Object> results = new HashMap<>();
 
         if(jsonVar != null){
+            logger.info("jsonVar value type "+jsonVar.getClass().getTypeName());
+            logger.info("jsonVar value as string "+jsonVar.toString());
+
             CustomPojo customPojo = objectMapper.convertValue(jsonVar,CustomPojo.class);
             results.put("test-json-variable-result","able to convert test-json-variable-name to "+CustomPojo.class.getName());
         }

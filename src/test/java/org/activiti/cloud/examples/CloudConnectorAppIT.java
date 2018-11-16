@@ -57,8 +57,9 @@ public class CloudConnectorAppIT {
     @Test
     public void shouldConvertJsonToPojo() throws IOException {
         String json = "{ \"test-json-variable-element1\":\"test-json-variable-value1\"}";
-        JsonNode node = objectMapper.readTree(json);
-        CustomPojo customPojo = objectMapper.convertValue(node,CustomPojo.class);
+        Object jsonValue = objectMapper.readValue(json,Object.class);
+        CustomPojo customPojo = objectMapper.convertValue(jsonValue,CustomPojo.class);
+        assertThat(customPojo).isNotNull();
     }
 
 }
