@@ -69,11 +69,22 @@ public class ExampleConnector {
             results.put("test-json-variable-result","able to convert test-json-variable-name to "+CustomPojo.class.getName());
         }
 
+
         if( longJsonVar != null && longJsonVar instanceof LinkedHashMap){
             if(((LinkedHashMap) longJsonVar).get("verylongjson").toString().length() >= 4000){
                 results.put("test-long-json-variable-result","able to read long json");
             }
 
+        }
+
+        Object intVar = event.getIntegrationContext().getInBoundVariables().get("test-int-variable-name");
+        if( intVar != null && intVar instanceof Integer){
+            results.put("test-int-variable-result","able to read integer");
+        }
+
+        Object boolVar = event.getIntegrationContext().getInBoundVariables().get("test-bool-variable-name");
+        if( boolVar != null && boolVar instanceof Boolean){
+            results.put("test-bool-variable-result","able to read boolean");
         }
 
         results.put("var1",

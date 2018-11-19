@@ -55,7 +55,7 @@ public class CloudConnectorAppIT {
     }
 
     @Test
-    public void shouldConvertJsonToPojo() throws IOException {
+    public void shouldConvertExpectedJsonToPojo() throws IOException {
         String json = "{ \"test-json-variable-element1\":\"test-json-variable-value1\"}";
         Object jsonValue = objectMapper.readValue(json,Object.class);
         CustomPojo customPojo = objectMapper.convertValue(jsonValue,CustomPojo.class);
