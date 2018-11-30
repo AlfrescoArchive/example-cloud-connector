@@ -4,7 +4,7 @@ pipeline {
     }
     environment {
       ORG               = 'almerico'
-      APP_NAME          = 'activiti-cloud-query'
+      APP_NAME          = 'activiti-cloud-connector'
       CHARTMUSEUM_CREDS = credentials('jenkins-x-chartmuseum')
       GITHUB_CHARTS_REPO    = "https://github.com/almerico/helmrepo.git"
       GITHUB_HELM_REPO_URL = "https://almerico.github.io/helmrepo"
@@ -29,7 +29,7 @@ pipeline {
    //        sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$PREVIEW_VERSION"
 
 
-             dir('.charts/activiti-cloud-query') {
+             dir('.charts/activiti-cloud-connector') {
                sh "make build"
              }
           }
@@ -50,7 +50,7 @@ pipeline {
             sh "echo \$(jx-release-version) > VERSION"
             sh "mvn versions:set -DnewVersion=\$(cat VERSION)"
 
-            dir ('./charts/activiti-cloud-query') {
+            dir ('./charts/activiti-cloud-connector') {
               sh "make tag"
             }
             sh 'mvn clean deploy'
@@ -67,7 +67,7 @@ pipeline {
         }
         steps {
           container('maven') {
-            dir ('./charts/activiti-cloud-query') {
+            dir ('./charts/activiti-cloud-connector') {
               sh 'jx step changelog --version v\$(cat ../../VERSION)'
 
               // release the helm chart
