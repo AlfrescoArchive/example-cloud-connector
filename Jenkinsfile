@@ -3,11 +3,11 @@ pipeline {
       label "jenkins-maven"
     }
     environment {
-      ORG               = 'almerico'
+      ORG               = 'activiti'
       APP_NAME          = 'activiti-cloud-connector'
       CHARTMUSEUM_CREDS = credentials('jenkins-x-chartmuseum')
-      GITHUB_CHARTS_REPO    = "https://github.com/almerico/helmrepo.git"
-      GITHUB_HELM_REPO_URL = "https://almerico.github.io/helmrepo"
+      GITHUB_CHARTS_REPO    = "https://github.com/Activiti/activiti-cloud-helm-charts.git"
+      GITHUB_HELM_REPO_URL = "https://activiti.github.io/activiti-cloud-helm-charts/"
     }
     stages {
       stage('CI Build and push snapshot') {
@@ -24,10 +24,6 @@ pipeline {
             sh "mvn versions:set -DnewVersion=$PREVIEW_VERSION"
             sh "mvn install"
             sh 'export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold.yaml'
-
-//           skip building docker image for now
-   //        sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$PREVIEW_VERSION"
-
 
              dir(".charts/$APP_NAME") {
                sh "make build"
