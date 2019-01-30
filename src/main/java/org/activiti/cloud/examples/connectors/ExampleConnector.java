@@ -10,6 +10,7 @@ import org.activiti.cloud.api.process.model.IntegrationResult;
 import org.activiti.cloud.connectors.starter.channels.IntegrationResultSender;
 import org.activiti.cloud.connectors.starter.configuration.ConnectorProperties;
 import org.activiti.cloud.connectors.starter.model.IntegrationResultBuilder;
+import org.activiti.cloud.examples.services.UntappdService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ import static net.logstash.logback.marker.Markers.append;
 @EnableBinding(ExampleConnectorChannels.class)
 public class ExampleConnector {
 
+    private final static String SEARCH_TERM_PROPERTY_NAME = "untappd-query";
+    private final static String SEARCH_RESULT_PROPERTY_NAME = "untappd-query-results";
+
     private final Logger logger = LoggerFactory.getLogger(ExampleConnector.class);
 
     @Value("${spring.application.name}")
@@ -35,6 +39,9 @@ public class ExampleConnector {
 
     @Autowired
     private ConnectorProperties connectorProperties;
+
+    @Autowired
+    private UntappdService untappdService;
 
     private final ObjectMapper objectMapper;
 
@@ -89,6 +96,13 @@ public class ExampleConnector {
 
         results.put("var1",
                     var1);
+
+        logger.info("Received inbound variables: " + event.getIntegrationContext().getInBoundVariables());
+
+        String query = (String) event.getIntegrationContext().getInBoundVariables().get(SEARCH_TERM_PROPERTY_NAME);
+
+        logger.info("Performing search: " + query);
+
         Message<IntegrationResult> message = IntegrationResultBuilder.resultFor(event, connectorProperties)
                 .withOutboundVariables(results)
                 .buildMessage();
