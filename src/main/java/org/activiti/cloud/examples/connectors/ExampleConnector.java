@@ -103,6 +103,8 @@ public class ExampleConnector {
 
         logger.info("Performing search: " + query);
 
+        results.put(SEARCH_RESULT_PROPERTY_NAME, untappdService.search(query));
+
         Message<IntegrationResult> message = IntegrationResultBuilder.resultFor(event, connectorProperties)
                 .withOutboundVariables(results)
                 .buildMessage();
