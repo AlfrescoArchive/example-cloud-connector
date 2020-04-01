@@ -17,9 +17,6 @@
 package org.activiti.cloud.examples.connectors;
 
 import org.activiti.cloud.api.process.model.IntegrationRequest;
-import org.activiti.cloud.connectors.starter.channels.IntegrationResultSender;
-import org.activiti.cloud.connectors.starter.configuration.ConnectorProperties;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.cloud.stream.annotation.StreamListener;
@@ -36,16 +33,6 @@ public class TestErrorConnector {
 
         @Input(CHANNEL)
         SubscribableChannel testErrorConnectorInput();
-    }
-
-    private final IntegrationResultSender integrationResultSender;
-    private final ConnectorProperties connectorProperties;
-
-    @Autowired
-    public TestErrorConnector(IntegrationResultSender integrationResultSender,
-                              ConnectorProperties connectorProperties) {
-        this.integrationResultSender = integrationResultSender;
-        this.connectorProperties = connectorProperties;
     }
 
     @StreamListener(value = Channels.CHANNEL)

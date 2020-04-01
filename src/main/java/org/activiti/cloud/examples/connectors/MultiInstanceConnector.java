@@ -38,6 +38,10 @@ import org.springframework.stereotype.Component;
 @EnableBinding(MultiInstanceConnector.Channels.class)
 public class MultiInstanceConnector {
 
+    private final IntegrationResultSender integrationResultSender;
+    private final ConnectorProperties connectorProperties;
+    private final AtomicInteger counter = new AtomicInteger(0);
+
     public interface Channels {
 
         String CHANNEL = "miCloudConnectorInput";
@@ -45,10 +49,6 @@ public class MultiInstanceConnector {
         @Input(CHANNEL)
         SubscribableChannel miCloudConnectorInput();
     }
-
-    private final IntegrationResultSender integrationResultSender;
-    private final ConnectorProperties connectorProperties;
-    private final AtomicInteger counter = new AtomicInteger(0);
 
     @Autowired
     public MultiInstanceConnector(IntegrationResultSender integrationResultSender,
