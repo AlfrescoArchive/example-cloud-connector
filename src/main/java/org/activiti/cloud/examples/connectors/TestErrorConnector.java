@@ -27,15 +27,15 @@ import org.springframework.messaging.SubscribableChannel;
 import org.springframework.stereotype.Component;
 
 @Component
-@EnableBinding(TestErrorConnector.TestErrorConnectorChannels.class)
+@EnableBinding(TestErrorConnector.Channels.class)
 public class TestErrorConnector {
 
-    public interface TestErrorConnectorChannels {
+    public interface Channels {
 
-        String CHANNEL = "testErrorConnector";
+        String CHANNEL = "testErrorConnectorInput";
 
         @Input(CHANNEL)
-        SubscribableChannel input();
+        SubscribableChannel testErrorConnectorInput();
     }
 
     private final IntegrationResultSender integrationResultSender;
@@ -48,7 +48,7 @@ public class TestErrorConnector {
         this.connectorProperties = connectorProperties;
     }
 
-    @StreamListener(value = TestErrorConnectorChannels.CHANNEL)
+    @StreamListener(value = Channels.CHANNEL)
     public void handle(IntegrationRequest integrationRequest) {
         throw new Error("TestErrorConnector");
     }

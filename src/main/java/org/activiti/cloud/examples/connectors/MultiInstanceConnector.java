@@ -35,15 +35,15 @@ import org.springframework.messaging.SubscribableChannel;
 import org.springframework.stereotype.Component;
 
 @Component
-@EnableBinding(MultiInstanceConnector.MultiInstanceConnectorChannels.class)
+@EnableBinding(MultiInstanceConnector.Channels.class)
 public class MultiInstanceConnector {
 
-    public interface MultiInstanceConnectorChannels {
+    public interface Channels {
 
-        String CHANNEL = "miCloudConnector";
+        String CHANNEL = "miCloudConnectorInput";
 
         @Input(CHANNEL)
-        SubscribableChannel input();
+        SubscribableChannel miCloudConnectorInput();
     }
 
     private final IntegrationResultSender integrationResultSender;
@@ -57,7 +57,7 @@ public class MultiInstanceConnector {
         this.connectorProperties = connectorProperties;
     }
 
-    @StreamListener(value = MultiInstanceConnectorChannels.CHANNEL)
+    @StreamListener(value = Channels.CHANNEL)
     public void handle(IntegrationRequest integrationRequest) {
 
         Integer instanceCount = getVariableValue(integrationRequest.getIntegrationContext(),
