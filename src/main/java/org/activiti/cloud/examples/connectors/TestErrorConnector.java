@@ -50,6 +50,6 @@ public class TestErrorConnector {
 
     @StreamListener(value = Channels.CHANNEL)
     public void handle(IntegrationRequest integrationRequest) {
-        throw new Error("TestErrorConnector");
+        throw new RuntimeException("TestErrorConnector");
     }
 }
